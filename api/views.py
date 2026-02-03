@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
@@ -35,20 +35,8 @@ class ItemListView(APIView):
 
         item_serializer = ItemSerializer(data=data)
         if item_serializer.is_valid(raise_exception=True):
-            validated_data = item_serializer.validated_data
-
-            item = Item(
-                name=validated_data['name'],
-                desc=validated_data['desc'],
-                price=validated_data['price'],
-                category=validated_data['category'],
-                is_active=validated_data['is_active'],
-            )
-            item.save()
-
-            response_serializer = ItemSerializer(item)
-
-            return Response(response_serializer.data)
+            item_serializer.save()
+            return Response(item_serializer.data)
 
 
 class ItemDetailView(APIView):
