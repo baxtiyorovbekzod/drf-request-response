@@ -1,3 +1,11 @@
 from django.db import models
 
-# Create your models here.
+
+class Item(models.Model):
+    name = models.CharField()
+    desc = models.TextField()
+    category = models.CharField()
+    price = models.FloatField()
+    is_active = models.BooleanField()
+
+    
