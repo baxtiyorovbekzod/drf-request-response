@@ -5,16 +5,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from .models import Item
-from .serializers import ItemsQueryParamsSerializer, ItemSerializer
+from .models import Item , Product
+from .serializers import ItemsQueryParamsSerializer, ItemSerializer ,Productserializer ,ProductsQueryParamsSerializer
 
 
 
 class ItemListView(APIView):
     
     def get(self, request: Request) -> Response:
-        # min_price, max_price, limit, category, is_actice
-        # /api/books/?min_price=23&max_price=213&limit=20&category=tech&is_actice=true
+        
 
         query_params = request.query_params
 
