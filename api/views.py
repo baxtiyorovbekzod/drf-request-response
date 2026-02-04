@@ -60,3 +60,42 @@ class ItemDetailView(APIView):
 # client(chrome, js, postman) -> WSGI -> URL -> View (HttpRequest) -> APIView (Request)
 # client(chrome, js, postman) <- WSGI -> URL <- View (HttpResponse) <- APIView (Response)
 
+class ProductListView(APIView):
+    
+    def get(self, request: Request) -> Response:
+        
+
+        query_params = request.query_params
+
+        query_serializer = ProductsQueryParamsSerializer(data=query_params)
+
+        if query_serializer.is_valid(raise_exception=True):
+            
+            products = Product.objects.all()
+
+            product_serializer = Productserializer(products, many=True)
+
+            return Response(product_serializer.data, status=status.HTTP_200_OK)
+
+        return Response(data="error", status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request: Request) -> Response:
+        data = request.data
+
+        product_serializer = Productserializer(data=data)
+        if product_serializer.is_valid(raise_exception=True):
+            validated_data = product_serializer.validated_data
+
+            product = Product(
+                name=validated_data['name'],
+                desc=validated_data['desc'],
+                price=validated_data['price'],
+                category=validated_data['category'],
+                is_active=validated_data['is_active'],
+                stock=validated_data['stock'],
+            )
+            product.save()
+
+            response_serializer = Productserializer(product)
+
+            return Response(response_serializer.data)
